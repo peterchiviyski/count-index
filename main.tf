@@ -1,10 +1,14 @@
-# The following example shows how to generate a unique pet name
-# for an AWS EC2 instance that changes each time a new AMI id is
-# selected.
+provider "null" {}
 
-resource "random_pet" "server" {
-  keepers = {
-    # Generate a new pet name each time we switch to a new AMI id
-    ami_id = var.ami_id
-  }
+resource "null_resource" "date"{
+ provisioner "local-exec" {
+  command = "echo `date`"
+ }
+}
+
+
+module "local" {
+  source   = "./local"
+  count = 3
+  name     = "file${count.index +1}.txt"
 }
